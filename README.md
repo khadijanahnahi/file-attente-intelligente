@@ -41,18 +41,3 @@ Citoyen, agent d'accueil, agent de guichet, responsable, administrateur.
 - **Sécurité :** Spring Security, JWT, BCrypt
 - **Déploiement :** Docker, Docker Compose
 
-## Installation
-
-```bash
-git clone https://github.com/<votre-compte>/smart-queue-civil-registry.git
-cd smart-queue-civil-registry
-docker compose up --build
-```
-
-## Équipe
-
-À compléter.
-
-## Licence
-
-MIT
