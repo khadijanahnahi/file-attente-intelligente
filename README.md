@@ -1,7 +1,7 @@
 # file-attente-intelligente
-Application web intelligente de gestion des files d’attente sur place pour les communes et bureaux d’état civil : tickets numériques, appel par guichet, estimation du temps d’attente, notifications et tableau de bord. Projet UML &amp; Design Patterns.
+Application web intelligente de gestion des files d’attente sur place pour les communes et bureaux d’état civil : tickets numériques, appel par guichet, estimation du temps d’attente, notifications et tableau de bord.
 
-Projet du module **UML et Design Patterns**.
+
 
 ## Problème
 
@@ -24,13 +24,11 @@ Citoyen, agent d'accueil, agent de guichet, responsable, administrateur.
 
 ## Design patterns
 
-| Pattern | Utilisation |
-| --- | --- |
-| Strategy | Politiques de file (FIFO, priorité) |
-| Observer | Notifications et écran d'affichage |
-| State | Cycle de vie du ticket |
-| Factory Method | Création des tickets et des notifications |
-| Command | Actions de l'agent (appeler, transférer, annuler) |
+**Strategy** :  Politiques de file (FIFO, priorité) 
+**Observer** : Notifications et écran d'affichage 
+**State** : Cycle de vie du ticket 
+**Factory Method** : Création des tickets et des notifications 
+**Command** : Actions de l'agent (appeler, transférer, annuler) 
 
 ## Technologies
 
