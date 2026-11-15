@@ -39,3 +39,18 @@ Citoyen, agent d'accueil, agent de guichet, responsable, administrateur.
 - **Sécurité :** Spring Security, JWT, BCrypt
 - **Déploiement :** Docker, Docker Compose
 
+## Démarrer le backend en local
+
+Le secret JWT doit être fourni par l'environnement et contenir au moins 32 caractères. Exemple PowerShell (secret de développement uniquement) :
+
+```powershell
+$env:FILES_JWT_SECRET = "secret-de-developpement-a-remplacer-123456"
+$env:DB_USER = "postgres"
+$env:DB_PASSWORD = "12345"
+docker compose up -d db
+cd backend
+mvn spring-boot:run
+```
+
+Le schéma et les comptes de démonstration sont initialisés par `database/schema.sql`. Ne réutilisez pas ces comptes ni les valeurs de développement en production. Pour le déploiement, configurez aussi `CORS_ALLOWED_ORIGINS` et `WEBSOCKET_ALLOWED_ORIGINS` avec les origines exactes du frontend.
+

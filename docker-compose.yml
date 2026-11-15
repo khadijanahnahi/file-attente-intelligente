@@ -1,11 +1,11 @@
 services:
   db:
     image: postgres:16
-    container_name: files-attente-db
+    container_name: files-attente
     environment:
-      POSTGRES_DB: files_attente
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: app123
+      POSTGRES_DB: ${DB_NAME:-files_attente}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-12345}
     ports:
       - "5432:5432"
     volumes:

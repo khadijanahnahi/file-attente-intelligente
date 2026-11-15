@@ -4,6 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ma.commune.files.pattern.observer.EvenementFile;
+import ma.commune.files.pattern.observer.FileObserver;
+import ma.commune.files.pattern.strategy.PolitiqueFile;
+
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * File d'attente d'un service.
@@ -34,4 +42,34 @@ public class File {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private EtatFile etat = EtatFile.OUVERTE;
+
+    @Transient
+    private final Set<FileObserver> observateurs = new LinkedHashSet<>();
+
+    public PolitiqueFile politiqueCourante() {
+        return PolitiqueFile.depuis(politique);
+    }
+
+    public void changerPolitique(CodePolitique nouvellePolitique) {
+        if (nouvellePolitique == null) {
+            throw new IllegalArgumentException("La politique de file est obligatoire.");
+        }
+        this.politique = nouvellePolitique;
+    }
+
+    public Optional<Ticket> retirerSuivant(List<Ticket> enAttente) {
+        return politiqueCourante().choisirSuivant(enAttente);
+    }
+
+    public void abonner(FileObserver observateur) {
+        observateurs.add(observateur);
+    }
+
+    public void desabonner(FileObserver observateur) {
+        observateurs.remove(observateur);
+    }
+
+    public void notifier(EvenementFile evenement) {
+        observateurs.forEach(observateur -> observateur.mettreAJour(evenement));
+    }
 }

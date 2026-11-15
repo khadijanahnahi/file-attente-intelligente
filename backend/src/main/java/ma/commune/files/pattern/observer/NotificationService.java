@@ -2,6 +2,7 @@ package ma.commune.files.pattern.observer;
 
 import ma.commune.files.domain.Canal;
 import ma.commune.files.domain.Citoyen;
+import ma.commune.files.domain.CodeEtat;
 import ma.commune.files.domain.Notification;
 import ma.commune.files.domain.Ticket;
 import ma.commune.files.domain.TypeNotification;
@@ -10,13 +11,16 @@ import ma.commune.files.pattern.factory.EmailFactory;
 import ma.commune.files.pattern.factory.NotificationFactory;
 import ma.commune.files.pattern.factory.PushFactory;
 import ma.commune.files.pattern.factory.SmsFactory;
+import ma.commune.files.repository.TicketRepository;
 import ma.commune.files.repository.NotificationRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Observateur qui prévient le citoyen (confirmation, appel, absence).
+ * Observateur qui prévient le citoyen (confirmation, prochain tour, appel, absence).
  * Le canal est créé par une NotificationFactory (Factory Method) :
  * e-mail si le citoyen en a un, sinon SMS (simulé en MVP). Le push est envoyé en plus
  * sur /topic/ticket/{id} pour la page de suivi.
@@ -24,29 +28,73 @@ import java.util.Optional;
 @Component
 public class NotificationService implements FileObserver {
 
-    private final NotificationRepository repository;
-    private final PushFactory pushFactory;
+    private static final System.Logger LOG = System.getLogger(NotificationService.class.getName());
 
-    public NotificationService(NotificationRepository repository, PushFactory pushFactory) {
+    private final NotificationRepository repository;
+    private final TicketRepository tickets;
+    private final PushFactory pushFactory;
+    private final int seuilBientotAppele;
+
+    public NotificationService(NotificationRepository repository, TicketRepository tickets,
+                                PushFactory pushFactory,
+                                @Value("${files.notifications.bientot-appele:3}") int seuilBientotAppele) {
         this.repository = repository;
+        this.tickets = tickets;
         this.pushFactory = pushFactory;
+        this.seuilBientotAppele = Math.max(0, seuilBientotAppele);
     }
 
     @Override
     public void mettreAJour(EvenementFile evt) {
-        Optional<TypeNotification> type = typePour(evt.type());
-        if (type.isEmpty()) {
-            return;   // cet événement n'envoie rien au citoyen
+        if (evt.type() == TypeEvenement.TICKET_CREE) {
+            notifierUneFois(evt.ticket(), TypeNotification.CONFIRMATION);
+        } else if (evt.type() == TypeEvenement.TICKET_APPELE) {
+            notifierUneFois(evt.ticket(), TypeNotification.APPELE);
+            notifierBientotAppeles(evt.ticket());
+        } else if (evt.type() == TypeEvenement.TICKET_ABSENT) {
+            notifierUneFois(evt.ticket(), TypeNotification.ABSENT);
+            notifierBientotAppeles(evt.ticket());
+        } else if (evt.type() == TypeEvenement.TICKET_ANNULE
+                || evt.type() == TypeEvenement.TICKET_TERMINE) {
+            notifierBientotAppeles(evt.ticket());
         }
-        Ticket ticket = evt.ticket();
-        Citoyen citoyen = ticket.getCitoyen();
-        String message = messagePour(type.get(), ticket);
+    }
 
-        envoyer(pushFactory, ticket, type.get(), String.valueOf(ticket.getId()), message);
+    private void notifierUneFois(Ticket ticket, TypeNotification type) {
+        if (dejaEnvoyee(ticket, type)) {
+            return;
+        }
+        Citoyen citoyen = ticket.getCitoyen();
+        String message = messagePour(type, ticket);
+        envoyerTousCanaux(ticket, type, citoyen, message);
+    }
+
+    private void notifierBientotAppeles(Ticket evenementTicket) {
+        if (seuilBientotAppele == 0) {
+            return;
+        }
+        List<Ticket> attente = new ArrayList<>(tickets.findByFileIdAndEtatOrderByHeureCreationAsc(
+                evenementTicket.getFile().getId(), CodeEtat.EN_ATTENTE));
+        List<Ticket> ordonnes = new ArrayList<>(attente.size());
+        while (!attente.isEmpty() && ordonnes.size() < seuilBientotAppele) {
+            Ticket suivant = evenementTicket.getFile().politiqueCourante()
+                    .choisirSuivant(attente).orElseThrow();
+            ordonnes.add(suivant);
+            attente.remove(suivant);
+        }
+        ordonnes.forEach(ticket -> notifierUneFois(ticket, TypeNotification.BIENTOT_APPELE));
+    }
+
+    private boolean dejaEnvoyee(Ticket ticket, TypeNotification type) {
+        return repository.existsByTicketIdAndType(ticket.getId(), type);
+    }
+
+    private void envoyerTousCanaux(Ticket ticket, TypeNotification type, Citoyen citoyen, String message) {
+        envoyer(pushFactory, ticket, type, String.valueOf(ticket.getId()), message);
         if (citoyen.getEmail() != null && !citoyen.getEmail().isBlank()) {
-            envoyer(new EmailFactory(), ticket, type.get(), citoyen.getEmail(), message);
+            envoyer(new EmailFactory(), ticket, type, citoyen.getEmail(), message);
         } else if (citoyen.getTelephone() != null && !citoyen.getTelephone().isBlank()) {
-            envoyer(new SmsFactory(), ticket, type.get(), citoyen.getTelephone(), message);
+            envoyer(new SmsFactory(), ticket, type, citoyen.getTelephone(), message);
         }
     }
 
@@ -57,7 +105,9 @@ public class NotificationService implements FileObserver {
         try {
             canal.envoyer(destinataire, message);
         } catch (RuntimeException e) {
-            succes = false;   // un échec d'envoi ne doit jamais bloquer le guichet
+            succes = false;
+            LOG.log(System.Logger.Level.ERROR, "Échec d'envoi " + canal.type()
+                    + " pour le ticket " + ticket.getId() + ": " + e.getMessage());
         }
         Notification n = new Notification();
         n.setTicket(ticket);
@@ -66,15 +116,6 @@ public class NotificationService implements FileObserver {
         n.setMessage(message);
         n.setSucces(succes);
         repository.save(n);
-    }
-
-    static Optional<TypeNotification> typePour(TypeEvenement t) {
-        return switch (t) {
-            case TICKET_CREE   -> Optional.of(TypeNotification.CONFIRMATION);
-            case TICKET_APPELE -> Optional.of(TypeNotification.APPELE);
-            case TICKET_ABSENT -> Optional.of(TypeNotification.ABSENT);
-            default            -> Optional.empty();
-        };
     }
 
     static String messagePour(TypeNotification type, Ticket t) {

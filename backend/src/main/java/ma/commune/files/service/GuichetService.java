@@ -164,6 +164,23 @@ public class GuichetService {
         return tickets.findFirstByGuichetIdAndEtatIn(guichetDe(agentId).getId(), EN_COURS);
     }
 
+    @Transactional(readOnly = true)
+    public List<Ticket> fileDAttente(Long agentId) {
+        Guichet g = guichetDe(agentId);
+        if (g.getService() == null) {
+            throw new IllegalStateException("Le guichet " + g.getNumero() + " n'est rattaché à aucun service.");
+        }
+        File file = fileService.fileDuService(g.getService().getId());
+        List<Ticket> restants = new java.util.ArrayList<>(fileService.enAttente(file));
+        List<Ticket> ordonnes = new java.util.ArrayList<>(restants.size());
+        while (!restants.isEmpty()) {
+            Ticket suivant = file.retirerSuivant(restants).orElseThrow();
+            ordonnes.add(suivant);
+            restants.remove(suivant);
+        }
+        return ordonnes;
+    }
+
     // ------------------------- outils -------------------------
 
     private Guichet guichetDe(Long agentId) {

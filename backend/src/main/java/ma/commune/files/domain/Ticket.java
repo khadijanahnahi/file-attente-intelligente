@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ma.commune.files.pattern.state.EtatTicket;
 
 import java.time.LocalDateTime;
 
@@ -74,4 +75,54 @@ public class Ticket {
 
     @Column(name = "heure_fin")
     private LocalDateTime heureFin;
+
+    public EtatTicket etatCourant() {
+        return EtatTicket.depuis(etat);
+    }
+
+    public void placerEnFile() {
+        appliquer(etatCourant().placerEnFile(this));
+    }
+
+    public void appeler(Guichet guichet) {
+        appliquer(etatCourant().appeler(this, guichet));
+    }
+
+    public void rappeler() {
+        appliquer(etatCourant().rappeler(this));
+    }
+
+    public void traiter() {
+        appliquer(etatCourant().traiter(this));
+    }
+
+    public void terminer() {
+        appliquer(etatCourant().terminer(this));
+    }
+
+    public void marquerAbsent() {
+        appliquer(etatCourant().marquerAbsent(this));
+    }
+
+    public void annuler() {
+        appliquer(etatCourant().annuler(this));
+    }
+
+    public void remettreEnAttente() {
+        appliquer(etatCourant().remettreEnAttente(this));
+    }
+
+    public void restaurerEtat(CodeEtat etat) {
+        this.etat = etat;
+        if (etat == CodeEtat.EN_ATTENTE) {
+            heureFin = null;
+            heureAppel = null;
+            guichet = null;
+            nbRappels = 0;
+        }
+    }
+
+    private void appliquer(EtatTicket nouvelEtat) {
+        this.etat = nouvelEtat.code();
+    }
 }

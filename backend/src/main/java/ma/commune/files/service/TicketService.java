@@ -86,6 +86,9 @@ public class TicketService {
         }
 
         Priorite priorite = requete.priorite() != null ? requete.priorite() : Priorite.NORMALE;
+        if (priorite == Priorite.PRIORITAIRE && requete.motif() == null) {
+            throw new IllegalArgumentException("Un motif est obligatoire pour un ticket prioritaire.");
+        }
         int sequence = prochaineSequence(service);
         Ticket ticket = TicketFactory.pour(priorite).creerTicket(service, file, citoyen, sequence, requete.motif());
         if (requete.agentAccueilId() != null) {

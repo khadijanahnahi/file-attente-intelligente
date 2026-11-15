@@ -39,7 +39,7 @@ public class JwtService {
                       @Value("${files.jwt.duree-heures:8}") long dureeHeures) {
         byte[] octets = secret.getBytes(StandardCharsets.UTF_8);
         if (octets.length < 32) {
-            throw new IllegalStateException("files.jwt.secret doit faire au moins 32 caractères (variable JWT_SECRET).");
+            throw new IllegalStateException("files.jwt.secret doit faire au moins 32 caractères (variable FILES_JWT_SECRET).");
         }
         this.cle = octets;
         this.dureeSecondes = dureeHeures * 3600;
