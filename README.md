@@ -45,8 +45,7 @@ Le secret JWT doit être fourni par l'environnement et contenir au moins 32 cara
 
 ```powershell
 $env:FILES_JWT_SECRET = "secret-de-developpement-a-remplacer-123456"
-$env:DB_USER = "postgres"
-$env:DB_PASSWORD = "12345"
+$env:DB_PASSWORD = "*****"
 docker compose up -d db
 cd backend
 mvn spring-boot:run
