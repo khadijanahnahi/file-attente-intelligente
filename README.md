@@ -47,7 +47,7 @@ Le secret JWT doit être fourni par l'environnement et contenir au moins 32 cara
 $env:FILES_JWT_SECRET = "secret-de-developpement-a-remplacer-123456"
 $env:DB_PASSWORD = "*****"
 docker compose up -d db
-cd backend
+cd backend    //$env:Path += ";C:\tools\apache-maven-3.9.9\bin"//
 mvn spring-boot:run
 ```
 
