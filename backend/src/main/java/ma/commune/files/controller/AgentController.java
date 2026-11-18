@@ -25,6 +25,12 @@ public class AgentController {
         this.guichet = guichet;
     }
 
+    /** Guichet de l'agent connecté (404 s'il n'en a pas). */
+    @GetMapping("/moi")
+    public GuichetView moi(@AuthenticationPrincipal AgentPrincipal a) {
+        return GuichetView.de(guichet.monGuichet(a.id()));
+    }
+
     @PostMapping("/ouvrir")
     public GuichetView ouvrir(@AuthenticationPrincipal AgentPrincipal a) {
         return GuichetView.de(guichet.ouvrir(a.id()));

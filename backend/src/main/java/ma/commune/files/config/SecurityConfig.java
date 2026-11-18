@@ -67,6 +67,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/tickets").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/tickets/*").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/tickets/*/annuler").hasAnyRole("ACCUEIL", "GUICHET", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/tickets/*/annuler-citoyen").permitAll()
                 // Agent d'accueil : ticket pour un citoyen sans smartphone
                 .requestMatchers("/api/accueil/**").hasAnyRole("ACCUEIL", "ADMIN")
                 // Agent de guichet : appeler, traiter, terminer...

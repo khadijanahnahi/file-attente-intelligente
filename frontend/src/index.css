@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --color-paper: #edf1f5;
+  --color-sheet: #ffffff;
+  --color-ink: #0e2238;
+  --color-muted: #55687c;
+  --color-line: #cfd8e2;
+  --color-majorelle: #2b3fcb;
+  --color-majorelle-dark: #1f2f9e;
+  --color-majorelle-tint: #e6e9fb;
+  --color-saffron: #f5b301;
+  --color-ok: #0c7a5c;
+  --color-danger: #b42318;
+}
+
+html { background: var(--color-paper); color: var(--color-ink); }
+body { font-family: var(--font-sans); min-height: 100dvh; -webkit-font-smoothing: antialiased; }
+
+:focus-visible { outline: 3px solid var(--color-majorelle); outline-offset: 2px; border-radius: 6px; }
+
+/* Ticket en papier : bord inférieur net, encoches de déchirure au niveau du pointillé */
+.stub { position: relative; background: var(--color-sheet); border-radius: 18px; box-shadow: 0 2px 0 var(--color-line); }
+.stub-tear { position: relative; border-top: 2px dashed var(--color-line); }
+.stub-tear::before, .stub-tear::after {
+  content: ""; position: absolute; top: -11px; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--color-paper);
+}
+.stub-tear::before { inset-inline-start: -12px; }
+.stub-tear::after { inset-inline-end: -12px; }
+
+@keyframes print { from { transform: translateY(-18px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: no-preference) {
+  .stub-print { animation: print 0.55s cubic-bezier(0.2, 0.8, 0.2, 1); }
+}
+
+@keyframes annonce { 0% { transform: scale(0.97); filter: brightness(1.25); } 100% { transform: none; filter: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .ecran-annonce { animation: annonce 0.9s ease-out; }
+}

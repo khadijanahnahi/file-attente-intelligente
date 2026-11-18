@@ -1,6 +1,7 @@
 package ma.commune.files.controller;
 
 import jakarta.validation.Valid;
+import ma.commune.files.dto.AnnulationCitoyenRequest;
 import ma.commune.files.dto.PriseTicketRequest;
 import ma.commune.files.dto.TicketInfo;
 import ma.commune.files.security.AgentPrincipal;
@@ -40,6 +41,12 @@ public class TicketController {
     @PostMapping("/tickets/{id}/annuler")
     public TicketInfo annuler(@PathVariable Long id) {
         return tickets.annuler(id);
+    }
+
+    /** Le citoyen annule son ticket : son contact (téléphone ou e-mail) sert de preuve. */
+    @PostMapping("/tickets/{id}/annuler-citoyen")
+    public TicketInfo annulerParCitoyen(@PathVariable Long id, @Valid @RequestBody AnnulationCitoyenRequest r) {
+        return tickets.annulerParCitoyen(id, r.contact());
     }
 
     /** L'agent d'accueil crée un ticket à la place d'un citoyen sans smartphone. */

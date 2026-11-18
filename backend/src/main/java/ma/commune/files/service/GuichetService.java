@@ -159,6 +159,12 @@ public class GuichetService {
         return t;
     }
 
+    /** Guichet tenu par l'agent connecté : l'interface relit ainsi son état, son numéro et son service. */
+    @Transactional(readOnly = true)
+    public Guichet monGuichet(Long agentId) {
+        return guichetDe(agentId);
+    }
+
     @Transactional(readOnly = true)
     public Optional<Ticket> ticketEnCoursDe(Long agentId) {
         return tickets.findFirstByGuichetIdAndEtatIn(guichetDe(agentId).getId(), EN_COURS);

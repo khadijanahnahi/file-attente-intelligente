@@ -1,0 +1,219 @@
+{
+  "app": {
+    "nom": "File d'attente intelligente",
+    "retour": "Retour"
+  },
+  "langue": {
+    "autre": "العربية",
+    "changer": "Changer de langue"
+  },
+  "services": {
+    "titre": "Prenez un ticket depuis votre téléphone",
+    "sousTitre": "Choisissez votre démarche. Nous vous prévenons quand votre tour approche.",
+    "chargement": "Chargement des services…",
+    "vide": "Aucun service n'est ouvert pour le moment.",
+    "enAttente": "En attente",
+    "attenteEstimee": "≈ {{n}} min",
+    "horaires": "Ouvert de {{debut}} à {{fin}}",
+    "ferme": "Fermé",
+    "reprendre": "Vous avez déjà un ticket : {{numero}}",
+    "voirTicket": "Voir mon ticket"
+  },
+  "form": {
+    "titre": "Vos coordonnées",
+    "nom": "Nom",
+    "facultatif": "Facultatif",
+    "telephone": "Téléphone",
+    "email": "Adresse e-mail",
+    "contactAide": "Indiquez au moins un contact pour être prévenu quand votre tour approche.",
+    "priorite": "Je bénéficie d'une priorité",
+    "motifTitre": "Motif de la priorité",
+    "motif": {
+      "PERSONNE_AGEE": "Personne âgée",
+      "HANDICAP": "Situation de handicap",
+      "FEMME_ENCEINTE": "Femme enceinte"
+    },
+    "envoyer": "Prendre le ticket",
+    "envoi": "Création du ticket…",
+    "annuler": "Fermer",
+    "erreurs": {
+      "contact": "Indiquez un numéro de téléphone ou une adresse e-mail.",
+      "telephone": "Ce numéro de téléphone n'est pas valide.",
+      "email": "Cette adresse e-mail n'est pas valide.",
+      "motif": "Choisissez le motif de votre priorité."
+    }
+  },
+  "ticket": {
+    "titre": "Votre ticket",
+    "position": "Position",
+    "devant": "Devant vous",
+    "attente": "Attente estimée",
+    "min": "{{n}} min",
+    "guichet": "Guichet {{n}}",
+    "etat": {
+      "CREE": "En préparation",
+      "EN_ATTENTE": "En attente",
+      "APPELE": "Appelé",
+      "EN_TRAITEMENT": "En traitement",
+      "TERMINE": "Terminé",
+      "ABSENT": "Absent",
+      "ANNULE": "Annulé"
+    },
+    "message": {
+      "attente": "Cette page se met à jour toute seule : vous pouvez patienter tranquillement.",
+      "appele": "C'est votre tour. Rendez-vous au guichet {{n}}.",
+      "enTraitement": "Votre dossier est en cours de traitement au guichet {{n}}.",
+      "termine": "Merci, votre démarche est terminée.",
+      "absent": "Vous ne vous êtes pas présenté à l'appel : ce ticket n'est plus valable.",
+      "annule": "Ce ticket a été annulé."
+    },
+    "dejaExistant": "Vous aviez déjà un ticket pour ce service. Le voici.",
+    "annuler": "Annuler mon ticket",
+    "confirmerAnnuler": "Confirmer l'annulation",
+    "garder": "Garder mon ticket",
+    "nouveau": "Prendre un nouveau ticket",
+    "direct": "Mise à jour en direct",
+    "reconnexion": "Reconnexion en cours",
+    "messages": "Messages reçus",
+    "introuvable": "Ce ticket n'existe pas ou n'est plus disponible.",
+    "quitter": "Quitter cette page",
+    "quitterAide": "Votre ticket {{numero}} reste valable dans la file. Notez son numéro : cet appareil ne le retrouvera plus tout seul.",
+    "quitterConfirmer": "Quitter et revenir aux services",
+    "annulerAide": "Vous ne pouvez plus attendre ? En annulant, vous libérez votre place dans la file. Pour revenir, il faudra prendre un nouveau ticket.",
+    "contactAnnulation": "Téléphone ou e-mail donné pour ce ticket"
+  },
+  "erreurs": {
+    "reseau": "Impossible de joindre le serveur. Vérifiez votre connexion puis réessayez.",
+    "generique": "Une erreur est survenue. Réessayez dans un instant.",
+    "reessayer": "Réessayer"
+  },
+  "introuvable": {
+    "titre": "Page introuvable",
+    "retour": "Retour à l'accueil"
+  },
+  "roles": {
+    "ACCUEIL": "Agent d'accueil",
+    "GUICHET": "Agent de guichet",
+    "RESPONSABLE": "Responsable",
+    "ADMIN": "Administrateur"
+  },
+  "nav": {
+    "titre": "Navigation",
+    "guichet": "Guichet",
+    "accueil": "Accueil",
+    "tableau": "Tableau de bord",
+    "admin": "Administration"
+  },
+  "connexion": {
+    "titre": "Espace agents",
+    "sousTitre": "Connectez-vous pour accéder à votre poste.",
+    "login": "Identifiant",
+    "mdp": "Mot de passe",
+    "bouton": "Se connecter",
+    "enCours": "Connexion…",
+    "erreur": "Identifiant ou mot de passe incorrect.",
+    "espaceAgent": "Espace agents",
+    "deconnexion": "Se déconnecter"
+  },
+  "ecran": {
+    "voix": "Ticket {{numero}}, {{n}}",
+    "activerSon": "Activer le son",
+    "enAppel": "Ticket appelé",
+    "aucunAppel": "En attente du prochain appel",
+    "precedents": "Appels précédents"
+  },
+  "guichet": {
+    "titre": "Mon guichet",
+    "sansGuichet": "Aucun guichet ne vous est attribué. Demandez à l'administrateur de vous en affecter un.",
+    "etat": {
+      "OUVERT": "Ouvert",
+      "PAUSE": "En pause",
+      "FERME": "Fermé"
+    },
+    "ouvrir": "Ouvrir le guichet",
+    "reprendre": "Reprendre",
+    "pause": "Pause",
+    "fermer": "Fermer le guichet",
+    "enCours": "Ticket en cours",
+    "priorite": {
+      "PRIORITAIRE": "Prioritaire",
+      "URGENTE": "Urgent"
+    },
+    "rappels": "Rappels : {{n}}",
+    "traiter": "Le citoyen est présent",
+    "rappeler": "Rappeler",
+    "absent": "Marquer absent",
+    "annulerAppel": "Annuler l'appel",
+    "aideAbsent": "Pour marquer un citoyen absent, rappelez-le d'abord puis patientez quelques minutes.",
+    "terminer": "Terminer",
+    "aucunEnCours": "Aucun ticket en cours.",
+    "appeler": "Appeler le suivant",
+    "ouvrirPourAppeler": "Ouvrez le guichet pour appeler.",
+    "file": "File d'attente",
+    "fileVide": "Personne n'attend.",
+    "confirmer": "Confirmer",
+    "non": "Non",
+    "annulerTicket": "Annuler"
+  },
+  "accueil": {
+    "titre": "Ticket pour un citoyen",
+    "sousTitre": "Pour une personne qui n'a pas de smartphone : choisissez le service et saisissez ses coordonnées.",
+    "nouveau": "Nouveau ticket"
+  },
+  "config": {
+    "enregistre": "Enregistré",
+    "politique": "Règle de passage",
+    "politiques": {
+      "FIFO": "Ordre d'arrivée",
+      "PRIORITE": "Priorités d'abord",
+      "CHARGE_EQUILIBREE": "Charge équilibrée"
+    },
+    "nom": "Nom du service",
+    "duree": "Durée moyenne (min)",
+    "capacite": "Capacité de la file",
+    "ouverture": "Ouverture",
+    "fermeture": "Fermeture",
+    "actif": "Service actif",
+    "enregistrer": "Enregistrer",
+    "nouveauService": "Nouveau service",
+    "prefixe": "Préfixe (1 à 3 lettres)",
+    "creer": "Créer"
+  },
+  "tableau": {
+    "titre": "Tableau de bord",
+    "indicateurs": "Indicateurs",
+    "services": "Services",
+    "jour": "Jour",
+    "totalTickets": "Tickets du jour",
+    "enAttente": "En attente",
+    "parService": "Par service",
+    "service": "Service",
+    "tickets": "Tickets",
+    "attenteMoy": "Attente moy. (min)",
+    "traitementMoy": "Traitement moy. (min)",
+    "abandon": "Abandon",
+    "parGuichet": "Par guichet",
+    "traites": "Traités",
+    "dureeMoy": "Durée moy. (min)"
+  },
+  "admin": {
+    "titre": "Administration",
+    "agents": "Agents",
+    "guichets": "Guichets",
+    "services": "Services",
+    "role": "Rôle",
+    "actif": "Actif",
+    "changerMdp": "Nouveau mot de passe",
+    "nouveauMdp": "Nouveau mot de passe",
+    "nouvelAgent": "Nouvel agent",
+    "nom": "Nom",
+    "mdpAide": "10 caractères minimum.",
+    "service": "Service",
+    "agent": "Agent",
+    "aucunService": "Aucun service",
+    "aucunAgent": "Aucun agent",
+    "affectationFerme": "Fermez le guichet pour changer l'affectation.",
+    "nouveauGuichet": "Nouveau guichet",
+    "numero": "Numéro"
+  }
+}

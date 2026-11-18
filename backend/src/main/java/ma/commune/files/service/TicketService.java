@@ -118,6 +118,24 @@ public class TicketService {
                 .notifier(EvenementFile.de(TypeEvenement.TICKET_ANNULE, ticket));
         return info(ticket, false);
     }
+    /** Annulation par le citoyen : le contact donné à la prise du ticket sert de preuve. */
+    @Transactional
+    public TicketInfo annulerParCitoyen(Long ticketId, String contact) {
+        Ticket ticket = chercher(ticketId);
+        if (!contactCorrespond(ticket.getCitoyen(), contact)) {
+            throw new RessourceIntrouvableException("Le contact saisi ne correspond pas à ce ticket.");
+        }
+        return annuler(ticketId);
+    }
+
+    private static boolean contactCorrespond(Citoyen c, String contact) {
+        String saisi = contact == null ? "" : contact.trim();
+        if (saisi.isEmpty()) return false;
+        if (c.getEmail() != null && c.getEmail().equalsIgnoreCase(saisi)) return true;
+        String chiffres = saisi.replaceAll("\\D", "");
+        return c.getTelephone() != null && !chiffres.isEmpty()
+                && c.getTelephone().replaceAll("\\D", "").equals(chiffres);
+    }
 
     // ------------------------------------------------------------------
 
