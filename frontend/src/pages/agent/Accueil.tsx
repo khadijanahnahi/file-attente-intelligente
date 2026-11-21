@@ -5,6 +5,7 @@ import type { ServiceView, TicketInfo } from '../../api/types';
 import MessageErreur, { useTexteErreur } from '../../components/MessageErreur';
 import TicketStub from '../../components/TicketStub';
 import FormulaireTicket from '../citoyen/FormulaireTicket';
+import { nomService } from '../../i18n/nomService';
 
 /** Agent d'accueil : crée un ticket pour un citoyen sans smartphone (POST /api/accueil/tickets). */
 export default function Accueil() {
@@ -46,7 +47,7 @@ export default function Accueil() {
         <p className="mt-6 text-muted" aria-busy="true">{t('services.chargement')}</p>
       ) : choisi ? (
         <div className="mt-6 rounded-2xl bg-sheet p-5 shadow-[0_2px_0_var(--color-line)]">
-          <h2 className="mb-4 text-lg font-semibold">{choisi.nom}</h2>
+          <h2 className="mb-4 text-lg font-semibold">{nomService(choisi.nom)}</h2>
           <FormulaireTicket service={choisi} surFermer={() => setChoisi(null)} surCree={setCree} />
         </div>
       ) : (
@@ -60,7 +61,7 @@ export default function Accueil() {
                   className="flex min-h-16 w-full items-center justify-between gap-4 px-4 py-3 text-start disabled:opacity-60"
                 >
                   <span>
-                    <span className="block font-semibold">{s.nom}</span>
+                    <span className="block font-semibold">{nomService(s.nom)}</span>
                     {ferme && <span className="text-sm text-muted">{t('services.ferme')}</span>}
                   </span>
                   {!ferme && (

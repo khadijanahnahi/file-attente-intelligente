@@ -9,6 +9,7 @@ import { useSession } from '../../auth/useSession';
 import MessageErreur, { useTexteErreur } from '../../components/MessageErreur';
 import Onglets from '../../components/Onglets';
 import ServicesConfig from '../../components/ServicesConfig';
+import { nomService } from '../../i18n/nomService';
 
 const ROLES: RoleAgent[] = ['ACCUEIL', 'GUICHET', 'RESPONSABLE', 'ADMIN'];
 const champ = 'min-h-11 w-full rounded-lg border border-line bg-sheet px-3 text-base font-normal';
@@ -261,7 +262,7 @@ function LigneGuichet({
             className="min-h-11 rounded-lg border border-line bg-sheet px-2 font-normal disabled:opacity-60"
           >
             <option value="">{t('admin.aucunService')}</option>
-            {services.map((s) => <option key={s.id} value={s.id}>{s.nom}</option>)}
+            {services.map((s) => <option key={s.id} value={s.id}>{nomService(s.nom)}</option>)}
           </select>
         </label>
         <label className="text-sm font-semibold">
@@ -319,7 +320,7 @@ function NouveauGuichet({ agents, services, surCree }: { agents: AgentView[]; se
         <label className="text-sm font-semibold">{t('admin.service')}
           <select value={serviceId} onChange={(e) => setServiceId(e.target.value)} required className={`${champ} mt-1`}>
             <option value="" disabled>—</option>
-            {services.map((s) => <option key={s.id} value={s.id}>{s.nom}</option>)}
+            {services.map((s) => <option key={s.id} value={s.id}>{nomService(s.nom)}</option>)}
           </select>
         </label>
         <label className="text-sm font-semibold">{t('admin.agent')}

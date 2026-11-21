@@ -1,9 +1,10 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AgentLayout from './components/AgentLayout';
+import AccueilLayout from './components/AccueilLayout';
 import CitoyenLayout from './components/CitoyenLayout';
 import RequireRole, { ACCUEIL_ROLE } from './auth/RequireRole';
 import { useSession } from './auth/useSession';
-import ChoixService from './pages/citoyen/ChoixService';
+import AccueilCitoyen from './pages/citoyen/AccueilCitoyen';
 import MonTicket from './pages/citoyen/MonTicket';
 import Login from './pages/Login';
 import Ecran from './pages/Ecran';
@@ -22,8 +23,10 @@ export default function App() {
   return (
     <Routes>
       {/* Citoyen (public, mobile) */}
+      <Route element={<AccueilLayout />}>
+        <Route path="/" element={<AccueilCitoyen />} />
+      </Route>
       <Route element={<CitoyenLayout />}>
-        <Route path="/" element={<ChoixService />} />
         <Route path="/ticket/:id" element={<MonTicket />} />
         <Route path="*" element={<NotFound />} />
       </Route>

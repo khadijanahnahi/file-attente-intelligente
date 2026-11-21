@@ -6,6 +6,7 @@ import type { GuichetView, TicketView } from '../../api/types';
 import { useSession } from '../../auth/useSession';
 import MessageErreur, { useTexteErreur } from '../../components/MessageErreur';
 import { useTopic } from '../../hooks/useStomp';
+import { nomService } from '../../i18n/nomService';
 
 /**
  * Poste de l'agent de guichet (CU2). Le guichet est celui de l'agent connecté (déduit du jeton).
@@ -116,7 +117,7 @@ export default function Guichet() {
             {guichet ? t('ticket.guichet', { n: guichet.numero }) : t('guichet.titre')}
           </h1>
           <p className="mt-1 text-muted">
-            {guichet?.service ?? ''}
+            {guichet?.service ? nomService(guichet.service) : ''}
             {guichet?.service ? ' · ' : ''}
             <span className={`font-semibold ${ouvert ? 'text-ok' : etat === 'PAUSE' ? 'text-amber-700' : 'text-muted'}`}>
               {t(`guichet.etat.${etat}`)}
@@ -154,7 +155,7 @@ export default function Guichet() {
           {enCours ? (
             <div className="stub mt-3 overflow-hidden">
               <div className={`px-6 py-8 text-center ${enCours.etat === 'APPELE' ? 'bg-saffron' : 'bg-majorelle-tint'}`}>
-                <p className="text-sm font-medium">{enCours.service}</p>
+                <p className="text-sm font-medium">{nomService(enCours.service)}</p>
                 <p className="mt-1 text-[clamp(4rem,14vw,7rem)] leading-none font-bold tabular-nums">
                   <bdi dir="ltr">{enCours.numero}</bdi>
                 </p>

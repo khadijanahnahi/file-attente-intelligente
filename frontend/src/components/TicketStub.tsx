@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { TicketInfo } from '../api/types';
+import { nomService } from '../i18n/nomService';
 
 /** Un nombre ou un numéro de ticket reste écrit de gauche à droite, même en arabe. */
 function Ltr({ children }: { children: React.ReactNode }) {
@@ -15,7 +16,7 @@ export default function TicketStub({ ticket }: { ticket: TicketInfo }) {
   return (
     <article className="stub stub-print overflow-hidden" aria-label={t('ticket.titre')}>
       <div className={`px-6 pt-6 pb-8 text-center ${appele ? 'bg-saffron' : ''}`}>
-        <p className={`text-sm font-medium ${appele ? 'text-ink' : 'text-muted'}`}>{ticket.service}</p>
+        <p className={`text-sm font-medium ${appele ? 'text-ink' : 'text-muted'}`}>{nomService(ticket.service)}</p>
         <p
           className="mt-2 text-[clamp(4.5rem,24vw,7.5rem)] leading-none font-bold tracking-tight tabular-nums"
           aria-label={ticket.numero}

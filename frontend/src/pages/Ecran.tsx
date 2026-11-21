@@ -4,6 +4,7 @@ import { listerServices } from '../api/citoyen';
 import type { EvenementEcran, ServiceView } from '../api/types';
 import { useConnexionTempsReel, useTopic } from '../hooks/useStomp';
 import LangSwitch from '../components/LangSwitch';
+import { nomService } from '../i18n/nomService';
 
 /**
  * Écran de la salle d'attente (/ecran) : projeté sur un téléviseur, sans connexion.
@@ -141,7 +142,7 @@ export default function Ecran() {
         <section aria-live="assertive" aria-label={t('ecran.enAppel')}>
           {courant ? (
             <div key={annonce} className="ecran-annonce flex h-full min-h-72 flex-col justify-center rounded-3xl bg-saffron p-8 text-ink sm:p-10">
-              <p className="text-2xl font-semibold">{courant.service}</p>
+              <p className="text-2xl font-semibold">{nomService(courant.service)}</p>
               <p className="mt-2 text-[clamp(4rem,10vw,9rem)] leading-none font-bold tracking-tight whitespace-nowrap tabular-nums">
                 <bdi dir="ltr">{courant.numero}</bdi>
               </p>
@@ -169,7 +170,7 @@ export default function Ecran() {
                   <span className="block text-xl font-semibold">
                     {a.guichet !== null ? t('ticket.guichet', { n: a.guichet }) : ''}
                   </span>
-                  <span className="block text-sm text-white/60">{a.service}</span>
+                  <span className="block text-sm text-white/60">{nomService(a.service)}</span>
                 </span>
               </li>
             ))}
@@ -181,7 +182,7 @@ export default function Ecran() {
         <ul className="flex flex-wrap gap-x-10 gap-y-3">
           {services.filter((s) => s.actif).map((s) => (
             <li key={s.id} className="flex items-baseline gap-3">
-              <span className="text-lg font-semibold">{s.nom}</span>
+              <span className="text-lg font-semibold">{nomService(s.nom)}</span>
               <span className="text-white/70">
                 <bdi dir="ltr" className="text-2xl font-bold text-white tabular-nums">{s.nbEnAttente}</bdi>{' '}
                 {t('services.enAttente').toLowerCase()}

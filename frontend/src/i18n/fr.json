@@ -17,7 +17,11 @@
     "horaires": "Ouvert de {{debut}} à {{fin}}",
     "ferme": "Fermé",
     "reprendre": "Vous avez déjà un ticket : {{numero}}",
-    "voirTicket": "Voir mon ticket"
+    "voirTicket": "Voir mon ticket",
+    "ouvert": "Ouvert",
+    "choisi": "Démarche choisie",
+    "prendre": "Prendre mon ticket",
+    "horairesFerme": "Horaires : {{debut}} – {{fin}}"
   },
   "form": {
     "titre": "Vos coordonnées",
@@ -215,5 +219,75 @@
     "affectationFerme": "Fermez le guichet pour changer l'affectation.",
     "nouveauGuichet": "Nouveau guichet",
     "numero": "Numéro"
+  },
+  "landing": {
+    "pied": "Services de l'état civil · Commune",
+    "hero": {
+      "debut": "Prenez votre ticket.",
+      "phrases": [
+        "Évitez la queue.",
+        "Gardez votre temps.",
+        "Attendez ailleurs.",
+        "Soyez prévenu."
+      ],
+      "intro": "Choisissez votre démarche depuis votre téléphone. Nous vous prévenons quand votre tour approche.",
+      "cta": "Prendre un ticket",
+      "comment": "Comment ça marche"
+    },
+    "tel": {
+      "titre": "Mon ticket",
+      "numero": "VOTRE NUMÉRO",
+      "service": "Acte de naissance",
+      "devant": "avant vous",
+      "attente": "d'attente",
+      "dansFile": "Vous êtes dans la file. Pas besoin de rester debout.",
+      "bientot": "Bientôt appelé : rapprochez-vous de l'accueil.",
+      "appele": "C'est à vous ! Rendez-vous au guichet 2."
+    },
+    "puce": {
+      "telephone": "Depuis votre téléphone",
+      "attente": "Temps d'attente estimé",
+      "prevenu": "Prévenu avant votre tour"
+    },
+    "demarches": [
+      "Acte de naissance",
+      "Légalisation de signature",
+      "Certificat de résidence"
+    ],
+    "etapes": {
+      "titre": "Trois gestes, c'est tout",
+      "e1t": "Choisissez",
+      "e1p": "Touchez la démarche dont vous avez besoin.",
+      "e2t": "Donnez votre numéro",
+      "e2p": "Votre téléphone sert à vous prévenir. Aucun compte à créer.",
+      "e3t": "Suivez votre tour",
+      "e3p": "Votre numéro et le temps restant se mettent à jour tout seuls. Vous pouvez attendre ailleurs."
+    },
+    "tous": {
+      "titre": "Une file pour tout le monde",
+      "sous": "Que vous ayez un smartphone ou non.",
+      "p1t": "J'ai un smartphone",
+      "p1p": "Je prends mon ticket ici et je suis mon tour en direct.",
+      "p2t": "Je n'en ai pas",
+      "p2p": "Un agent d'accueil crée mon ticket à ma place.",
+      "p3t": "J'ai besoin d'une priorité",
+      "p3p": "À l'accueil, un agent peut me donner un ticket prioritaire (personne âgée, femme enceinte, handicap)."
+    },
+    "faq": {
+      "titre": "Questions fréquentes",
+      "q1": "Je n'ai pas de smartphone, que faire ?",
+      "q1r": "Allez à l'accueil. Un agent crée le ticket pour vous.",
+      "q2": "Et si je ne suis pas là quand on m'appelle ?",
+      "q2r": "Votre numéro est rappelé plusieurs fois. Si vous ne venez pas, il est marqué absent et vous devez reprendre un ticket.",
+      "q3": "Puis-je annuler mon ticket ?",
+      "q3r": "Oui, depuis la page de suivi : il faut saisir le téléphone ou l'e-mail donné à la prise du ticket. Votre place est libérée pour les autres.",
+      "q4": "Puis-je prendre deux tickets pour la même démarche ?",
+      "q4r": "Non. Si vous avez déjà un ticket actif pour cette démarche, vous retrouvez celui-ci."
+    },
+    "carte": {
+      "titre": "Une carte pour s'y retrouver",
+      "texte": "Chaque pastille est une démarche. Touchez-en une : elle est choisie dans la liste, prête pour votre ticket.",
+      "legende": "Une pastille grise correspond à une démarche fermée."
+    }
   }
 }

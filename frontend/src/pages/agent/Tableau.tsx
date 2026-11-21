@@ -6,6 +6,7 @@ import MessageErreur, { useTexteErreur } from '../../components/MessageErreur';
 import Onglets from '../../components/Onglets';
 import ServicesConfig from '../../components/ServicesConfig';
 import { useTopic } from '../../hooks/useStomp';
+import { nomService } from '../../i18n/nomService';
 
 const aujourdhui = () => {
   const d = new Date();
@@ -110,7 +111,7 @@ function Indicateurs() {
                 <tbody>
                   {services.map((s) => (
                     <tr key={s.serviceId} className="border-b border-line last:border-0">
-                      <th scope="row" className="p-3 text-start font-semibold">{s.service}</th>
+                      <th scope="row" className="p-3 text-start font-semibold">{nomService(s.service)}</th>
                       <td className="p-3 text-end tabular-nums"><bdi dir="ltr">{s.nbTickets}</bdi></td>
                       <td className="p-3 text-end tabular-nums"><bdi dir="ltr">{s.enAttente}</bdi></td>
                       <td className="p-3 text-end tabular-nums"><bdi dir="ltr">{min(s.attenteMoyenneMin)}</bdi></td>

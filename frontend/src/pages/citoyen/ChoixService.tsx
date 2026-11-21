@@ -3,21 +3,24 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { listerServices } from '../../api/citoyen';
 import type { ServiceView } from '../../api/types';
+import CarteService, { estFerme } from '../../components/accueil/CarteService';
+import { annoncerChoix, ecouterChoix } from '../../components/accueil/evenementsService';
 import MessageErreur, { useTexteErreur } from '../../components/MessageErreur';
 import { useTopic } from '../../hooks/useStomp';
 import { useTicketEnCours } from '../../hooks/useTicketEnCours';
 import FormulaireTicket from './FormulaireTicket';
-
-const heure = (h?: string) => (h ? h.slice(0, 5) : '');
+import { nomService } from '../../i18n/nomService';
 
 export default function ChoixService() {
   const { t } = useTranslation();
   const texteErreur = useTexteErreur();
   const [services, setServices] = useState<ServiceView[] | null>(null);
   const [erreur, setErreur] = useState<unknown>(null);
-  const [ouvert, setOuvert] = useState<number | null>(null);
+  const [choisiId, setChoisiId] = useState<number | null>(null);
+  const [formulaireOuvert, setFormulaireOuvert] = useState(false);
   const ticketEnCours = useTicketEnCours();
   const minuteur = useRef<number | undefined>(undefined);
+  const panneau = useRef<HTMLDivElement>(null);
 
   const charger = useCallback(() => {
     setErreur(null);
@@ -33,15 +36,39 @@ export default function ChoixService() {
   });
   useEffect(() => () => window.clearTimeout(minuteur.current), []);
 
+  // Le service choisi doit rester ouvert : s'il ferme pendant la sélection, on la retire.
+  const choisi = services?.find((s) => s.id === choisiId && !estFerme(s)) ?? null;
+
+  useEffect(() => {
+    if (choisi) panneau.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [choisi?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Un choix fait sur la carte (section plus bas) est repris ici.
+  useEffect(
+    () =>
+      ecouterChoix('liste', (id) => {
+        setChoisiId(id);
+        setFormulaireOuvert(false);
+      }),
+    [],
+  );
+
+  function choisir(id: number) {
+    const suivant = id === choisiId ? null : id;
+    setChoisiId(suivant);
+    setFormulaireOuvert(false);
+    annoncerChoix(suivant, 'liste');
+  }
+
   return (
     <section>
-      <h1 className="mt-2 text-balance text-[1.75rem] leading-tight font-bold">{t('services.titre')}</h1>
-      <p className="mt-3 max-w-prose text-pretty text-muted">{t('services.sousTitre')}</p>
+      <h2 className="text-center text-[1.75rem] leading-tight font-bold text-balance text-ink md:text-4xl">{t('services.titre')}</h2>
+      <p className="mx-auto mt-3 max-w-prose text-center text-pretty text-muted">{t('services.sousTitre')}</p>
 
       {ticketEnCours && (
         <Link
           to={`/ticket/${ticketEnCours.id}`}
-          className="mt-6 flex min-h-14 items-center justify-between gap-3 rounded-xl bg-majorelle px-4 py-3 text-white"
+          className="mx-auto mt-6 flex min-h-14 max-w-2xl items-center justify-between gap-3 rounded-xl bg-majorelle px-4 py-3 text-white"
         >
           <span>
             {t('services.reprendre', { numero: '' })}
@@ -51,79 +78,52 @@ export default function ChoixService() {
         </Link>
       )}
 
-      <div className="mt-8">
+      <div className="mt-10">
         {erreur !== null ? (
-          <MessageErreur texte={texteErreur(erreur)} surReessayer={charger} />
+          <div className="mx-auto max-w-2xl">
+            <MessageErreur texte={texteErreur(erreur)} surReessayer={charger} />
+          </div>
         ) : services === null ? (
-          <p className="text-muted" aria-busy="true">{t('services.chargement')}</p>
+          <p className="text-center text-muted" aria-busy="true">{t('services.chargement')}</p>
         ) : services.length === 0 ? (
-          <p className="text-muted">{t('services.vide')}</p>
+          <p className="text-center text-muted">{t('services.vide')}</p>
         ) : (
-          <ul className="divide-y divide-line overflow-hidden rounded-2xl bg-sheet shadow-[0_2px_0_var(--color-line)]">
-            {services.map((s) => (
-              <LigneService
-                key={s.id}
-                service={s}
-                deploye={ouvert === s.id}
-                surBasculer={() => setOuvert(ouvert === s.id ? null : s.id)}
-              />
+          <ul className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {services.map((s, i) => (
+              <li key={s.id}>
+                <CarteService service={s} position={i} selectionnee={choisi?.id === s.id} surChoisir={() => choisir(s.id)} />
+              </li>
             ))}
           </ul>
         )}
       </div>
-    </section>
-  );
-}
 
-function LigneService({ service, deploye, surBasculer }: { service: ServiceView; deploye: boolean; surBasculer: () => void }) {
-  const { t } = useTranslation();
-  const ferme = service.actif === false || service.ouvert === false;
-  const panneau = `form-service-${service.id}`;
-
-  return (
-    <li className={deploye ? 'border-s-4 border-majorelle' : 'border-s-4 border-transparent'}>
-      <button
-        type="button"
-        onClick={surBasculer}
-        disabled={ferme}
-        aria-expanded={deploye}
-        aria-controls={panneau}
-        className="flex min-h-20 w-full items-center justify-between gap-4 px-4 py-4 text-start disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        <span className="min-w-0">
-          <span className="block text-lg font-semibold text-balance">{service.nom}</span>
-          <span className="mt-0.5 block text-sm text-muted">
-            {ferme
-              ? t('services.ferme')
-              : service.heureOuverture && service.heureFermeture
-                ? t('services.horaires', { debut: heure(service.heureOuverture), fin: heure(service.heureFermeture) })
-                : null}
-          </span>
-        </span>
-
-        {!ferme && typeof service.nbEnAttente === 'number' && (
-          <span className="shrink-0 text-end">
-            <span className="block text-2xl leading-none font-bold tabular-nums">
-              <bdi dir="ltr">{service.nbEnAttente}</bdi>
-            </span>
-            <span className="mt-1 block text-xs text-muted">
-              {t('services.enAttente')}
-              {typeof service.attenteEstimeeMin === 'number' && (
-                <>
-                  {' · '}
-                  <bdi dir="ltr">{t('services.attenteEstimee', { n: service.attenteEstimeeMin })}</bdi>
-                </>
+      <div ref={panneau} aria-live="polite">
+        {choisi && (
+          <div className="mx-auto mt-8 max-w-xl rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 transition-all duration-300">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p>
+                <span className="block text-sm text-muted">{t('services.choisi')}</span>
+                <span className="block text-lg font-semibold text-ink">{nomService(choisi.nom)}</span>
+              </p>
+              {!formulaireOuvert && (
+                <button
+                  type="button"
+                  onClick={() => setFormulaireOuvert(true)}
+                  className="min-h-12 rounded-xl bg-majorelle px-6 font-semibold text-white transition-all duration-300 hover:bg-majorelle-dark"
+                >
+                  {t('services.prendre')}
+                </button>
               )}
-            </span>
-          </span>
+            </div>
+            {formulaireOuvert && (
+              <div className="mt-5 border-t border-gray-200 pt-5">
+                <FormulaireTicket service={choisi} surFermer={() => setFormulaireOuvert(false)} />
+              </div>
+            )}
+          </div>
         )}
-      </button>
-
-      {deploye && (
-        <div id={panneau} className="border-t border-line bg-paper/60 px-4 py-5">
-          <FormulaireTicket service={service} surFermer={surBasculer} />
-        </div>
-      )}
-    </li>
+      </div>
+    </section>
   );
 }

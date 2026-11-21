@@ -4,6 +4,7 @@ import { changerPolitique, creerService, modifierService } from '../api/agent';
 import { listerServices } from '../api/citoyen';
 import type { CodePolitique, ServiceView } from '../api/types';
 import MessageErreur, { useTexteErreur } from './MessageErreur';
+import { nomService } from '../i18n/nomService';
 
 const POLITIQUES: CodePolitique[] = ['FIFO', 'PRIORITE', 'CHARGE_EQUILIBREE'];
 const champ = 'min-h-11 w-full rounded-lg border border-line bg-sheet px-3 text-base';
@@ -83,7 +84,7 @@ function LigneService({ service, surChange }: { service: ServiceView; surChange:
     <form onSubmit={enregistrer} className="rounded-2xl bg-sheet p-5 shadow-[0_2px_0_var(--color-line)]">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h3 className="text-lg font-semibold">
-          {service.nom} <span className="text-sm font-normal text-muted">({service.prefixe})</span>
+          {nomService(service.nom)} <span className="text-sm font-normal text-muted">({service.prefixe})</span>
         </h3>
         <label className="flex items-center gap-2 text-sm font-semibold">
           {t('config.politique')}

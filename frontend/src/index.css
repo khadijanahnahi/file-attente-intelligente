@@ -39,3 +39,102 @@ body { font-family: var(--font-sans); min-height: 100dvh; -webkit-font-smoothing
 @media (prefers-reduced-motion: no-preference) {
   .ecran-annonce { animation: annonce 0.9s ease-out; }
 }
+
+/* ===================== Page d'accueil animée (préfixe lp-) ===================== */
+@keyframes lp-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes lp-floatc { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, calc(-50% - 14px)); } }
+@keyframes lp-spin { to { transform: rotate(360deg); } }
+@keyframes lp-spinrev { to { transform: rotate(-360deg); } }
+@keyframes lp-pulse { 0% { box-shadow: 0 0 0 0 rgb(12 122 92 / 0.55); } 100% { box-shadow: 0 0 0 22px transparent; } }
+@keyframes lp-ping { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.4); opacity: 0; } }
+@keyframes lp-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes lp-rise { from { transform: translateY(46px) scale(0.97); } to { transform: none; } }
+@keyframes lp-swap {
+  0%, 22% { transform: translateY(0); }
+  25%, 47% { transform: translateY(-1.12em); }
+  50%, 72% { transform: translateY(-2.24em); }
+  75%, 97% { transform: translateY(-3.36em); }
+  100% { transform: translateY(-4.48em); }
+}
+@keyframes lp-tap { 0%, 100% { transform: translate(0, 0) scale(1); } 30% { transform: translate(-4px, -4px) scale(0.9); } }
+@keyframes lp-ring { 0%, 100% { transform: rotate(0); } 10%, 30% { transform: rotate(14deg); } 20%, 40% { transform: rotate(-14deg); } 50% { transform: rotate(0); } }
+
+/* Défilement à l'entrée dans l'écran : décalage seulement, le contenu reste toujours visible */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lp-rv { animation: lp-rise linear both; animation-timeline: view(); animation-range: entry 0% entry 45%; }
+  }
+}
+
+/* Titre qui change de phrase */
+.lp-swap { display: block; height: 1.12em; overflow: hidden; color: var(--color-majorelle); }
+.lp-swap-track { display: block; animation: lp-swap 12s cubic-bezier(0.7, 0, 0.2, 1) infinite; }
+.lp-swap-track > b { display: block; height: 1.12em; font-weight: 800; white-space: nowrap; }
+
+/* Téléphone au centre, citoyens en orbite, bulles qui flottent */
+.lp-cluster { --s: min(480px, 92vw); position: relative; width: var(--s); height: var(--s); margin-inline: auto; font-size: calc(var(--s) * 0.029); }
+.lp-cluster::before { content: ""; position: absolute; inset: 4%; border-radius: 50%; background: radial-gradient(circle, var(--color-majorelle-tint), transparent 68%); }
+.lp-orbit { position: absolute; inset: 6%; border: 2px dashed var(--color-line); border-radius: 50%; animation: lp-spin 46s linear infinite; }
+.lp-sat { position: absolute; top: 50%; left: 50%; width: calc(var(--s) * 0.15); height: calc(var(--s) * 0.15); margin: calc(var(--s) * -0.075);
+  transform: rotate(var(--a)) translateY(calc(var(--s) * -0.44)) rotate(calc(var(--a) * -1)); }
+.lp-sat > div { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 3px solid var(--color-sheet); box-shadow: 0 18px 36px -18px rgb(14 34 56 / 0.45); animation: lp-spinrev 46s linear infinite; }
+.lp-phone { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2; width: calc(var(--s) * 0.43); aspect-ratio: 1 / 2;
+  display: flex; flex-direction: column; gap: 0.8em; padding: 1.5em 1.2em; border-radius: 2.9em; background: var(--color-sheet);
+  border: 0.7em solid var(--color-ink); box-shadow: 0 22px 44px -20px rgb(14 34 56 / 0.5); animation: lp-floatc 6s ease-in-out infinite; }
+.lp-tk { background: var(--color-majorelle); color: #fff; border-radius: 1.4em; padding: 1.1em 0.8em; text-align: center; transition: background 0.4s; }
+.lp-tk small { display: block; font-size: 0.72em; font-weight: 700; letter-spacing: 0.06em; opacity: 0.85; }
+.lp-tk b { display: block; font-size: 2.9em; line-height: 1.05; letter-spacing: 0.02em; }
+.lp-tk span { font-size: 0.8em; opacity: 0.92; }
+.lp-tk-go { background: var(--color-ok); animation: lp-pulse 1.2s infinite; }
+.lp-msg { margin-top: auto; min-height: 3.4em; padding: 0.7em 0.8em; border-radius: 1em; font-size: 0.78em; font-weight: 700; background: #dff5e8; color: var(--color-ok); transition: background 0.3s; }
+.lp-msg-hot { background: #fff0d6; color: #a15c00; }
+.lp-chip { position: absolute; z-index: 3; display: flex; align-items: center; gap: 0.6em; max-width: 15em; padding: 0.8em 1.1em; border-radius: 1.2em; font-size: 0.95em; font-weight: 700;
+  background: var(--color-sheet); border: 1px solid var(--color-line); box-shadow: 0 18px 36px -18px rgb(14 34 56 / 0.4); animation: lp-float 5s ease-in-out infinite; }
+.lp-chip svg { width: 1.6em; height: 1.6em; flex: none; }
+.lp-c1 { inset-inline-start: -8%; top: 8%; animation-delay: -1s; }
+.lp-c2 { inset-inline-end: -8%; top: 60%; animation-delay: -2.5s; }
+.lp-c3 { inset-inline-start: -6%; bottom: 4%; animation-delay: -4s; }
+.lp-bell { animation: lp-ring 3s infinite; transform-origin: 50% 10%; }
+@media (max-width: 540px) { .lp-chip { display: none; } }
+
+/* Bande des démarches */
+.lp-marq { overflow: hidden; border-bottom: 1px solid var(--color-line); background: var(--color-sheet); padding-block: 10px;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.lp-marq-row { display: flex; width: max-content; animation: lp-drift 30s linear infinite; }
+.lp-marq:hover .lp-marq-row { animation-play-state: paused; }
+[dir="rtl"] .lp-marq-row { animation-direction: reverse; }
+.lp-marq span { display: inline-flex; align-items: center; gap: 14px; padding-inline: 22px; font-size: 1rem; font-weight: 700; white-space: nowrap; }
+.lp-marq span::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--color-majorelle); }
+
+/* Étapes : symboles dessinés, sans cadre, reliés par un pointillé */
+@keyframes lp-caret { 50% { opacity: 0; } }
+.lp-glyph { width: 104px; height: 104px; overflow: visible; }
+.lp-g-tap { animation: lp-tap 1.8s infinite; }
+.lp-g-ring { animation: lp-ring 2.6s infinite; transform-origin: 48px 11px; }
+.lp-g-caret { animation: lp-caret 0.9s steps(1) infinite; }
+.lp-g-pulse { animation: lp-ping 2s infinite; transform-box: fill-box; transform-origin: center; }
+@media (min-width: 768px) {
+  .lp-step-link::after { content: ""; position: absolute; top: 52px; inset-inline-start: 128px; inset-inline-end: -2rem; border-top: 2px dashed var(--color-line); }
+}
+
+/* Pour tout le monde + FAQ */
+.lp-person { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px; border: 1px solid var(--color-line); border-radius: 26px; background: var(--color-sheet); transition: transform 0.2s; }
+.lp-person:hover { transform: translateY(-6px); }
+.lp-faq summary { list-style: none; }
+.lp-faq summary::-webkit-details-marker { display: none; }
+.lp-faq summary::after { content: "+"; font-size: 1.4rem; line-height: 1; color: var(--color-majorelle); }
+.lp-faq[open] summary::after { content: "–"; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-cluster *, .lp-marq-row, .lp-swap-track, .lp-glyph *, .lp-person { animation: none !important; transition: none !important; }
+}
+
+/* Habillage institutionnel de la page d'accueil : on redéfinit les couleurs du thème pour cette page seulement */
+.lp-theme {
+  --color-paper: #f8f9fa;
+  --color-ink: #1a1a1a;
+  --color-muted: #6b7280;
+  --color-majorelle: #1e3a8a;
+  --color-majorelle-dark: #172554;
+  --color-majorelle-tint: #e0e7ff;
+}
