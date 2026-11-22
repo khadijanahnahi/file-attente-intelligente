@@ -7,6 +7,7 @@ import type { EvenementEcran, NotificationPush, TicketInfo } from '../../api/typ
 import MessageErreur, { useTexteErreur } from '../../components/MessageErreur';
 import TicketStub from '../../components/TicketStub';
 import { useConnexionTempsReel, useTopic } from '../../hooks/useStomp';
+import AlerteSuivi from '../../components/AlerteSuivi';
 import { contactsMemorises, estActif, memoriserTicket } from '../../hooks/useTicketEnCours';
 
 const CLE_MESSAGE: Record<TicketInfo['etat'], string> = {
@@ -141,6 +142,7 @@ export default function MonTicket() {
       )}
 
       <TicketStub ticket={ticket} />
+      <AlerteSuivi ticket={ticket} />
 
       <p
         role="status"
