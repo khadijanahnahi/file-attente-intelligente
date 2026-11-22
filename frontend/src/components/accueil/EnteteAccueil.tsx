@@ -1,13 +1,6 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { changerLangue, type Langue } from '../../i18n';
-
-const LIENS = [
-  { href: '#services', cle: 'services' },
-  { href: '#etapes', cle: 'etapes' },
-  { href: '#faq', cle: 'faq' },
-] as const;
 
 function Logo() {
   return (
@@ -27,15 +20,7 @@ function Logo() {
 /** Barre du haut de l'accueil : collante, vitrée, avec liens d'ancre et sélecteur de langue en deux segments. */
 export default function EnteteAccueil() {
   const { t, i18n } = useTranslation();
-  const [defile, setDefile] = useState(false);
   const langue = i18n.language === 'ar' ? 'ar' : 'fr';
-
-  useEffect(() => {
-    const surDefilement = () => setDefile(window.scrollY > 8);
-    surDefilement();
-    window.addEventListener('scroll', surDefilement, { passive: true });
-    return () => window.removeEventListener('scroll', surDefilement);
-  }, []);
 
   const segment = (l: Langue, texte: string) => (
     <button
@@ -53,43 +38,26 @@ export default function EnteteAccueil() {
   );
 
   return (
-    <header className="sticky top-3 z-30 py-3">
-      <div
-        className={`flex items-center justify-between gap-3 rounded-2xl border bg-white/80 px-3 py-2 backdrop-blur-md transition-shadow duration-300 sm:px-4 ${
-          defile ? 'border-line shadow-[0_18px_40px_-20px_rgb(14_34_56/0.45)]' : 'border-transparent'
-        }`}
-      >
-        <Link to="/" className="group flex min-w-0 items-center gap-3 text-ink">
-          <Logo />
-          <span className="min-w-0 leading-tight">
-            <b className="block text-[.92rem] font-extrabold sm:text-[1.05rem]">{t('app.nom')}</b>
-            <small className="hidden text-xs font-semibold text-muted sm:block">{t('landing.nav.tagline')}</small>
-          </span>
+    <header className="flex items-center justify-between gap-3 py-5">
+      <Link to="/" className="group flex min-w-0 items-center gap-3 text-ink">
+        <Logo />
+        <b className="text-[.95rem] leading-tight font-extrabold sm:text-[1.1rem]">{t('app.nom')}</b>
+      </Link>
+
+      <div className="flex shrink-0 items-center gap-2">
+        <Link
+          to="/agent"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 text-sm font-bold text-white transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-majorelle"
+        >
+          <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="5" y="11" width="14" height="9" rx="2" />
+            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+          </svg>
+          <span className="hidden sm:inline">{t('connexion.espaceAgent')}</span>
         </Link>
-
-        <nav aria-label={t('landing.nav.menu')} className="hidden items-center gap-1 lg:flex">
-          {LIENS.map((l) => (
-            <a key={l.cle} href={l.href} className="rounded-full px-4 py-2 text-sm font-semibold text-ink/80 transition-colors hover:bg-majorelle-tint hover:text-majorelle">
-              {t(`landing.nav.${l.cle}`)}
-            </a>
-          ))}
-        </nav>
-
-        <div className="flex shrink-0 items-center gap-2">
-          <Link
-            to="/agent"
-            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 text-sm font-bold text-white transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-majorelle"
-          >
-            <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="5" y="11" width="14" height="9" rx="2" />
-              <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-            </svg>
-            <span className="hidden sm:inline">{t('connexion.espaceAgent')}</span>
-          </Link>
-          <div role="group" aria-label={t('langue.changer')} className="flex items-center gap-0.5 rounded-full border border-line bg-white p-1">
-            {segment('fr', 'FR')}
-            {segment('ar', 'عربي')}
-          </div>
+        <div role="group" aria-label={t('langue.changer')} className="flex items-center gap-0.5 rounded-full border border-line bg-white p-1">
+          {segment('fr', 'FR')}
+          {segment('ar', 'عربي')}
         </div>
       </div>
     </header>
