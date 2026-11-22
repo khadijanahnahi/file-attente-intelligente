@@ -10,30 +10,28 @@ import MessageErreur, { useTexteErreur } from '../../components/MessageErreur';
 import Onglets from '../../components/Onglets';
 import ServicesConfig from '../../components/ServicesConfig';
 import { nomService } from '../../i18n/nomService';
+import { btnPrincipal, carte, champ, Initiales, Interrupteur, Pastille, Section, STYLE_ROLE, etiquette } from '../../components/agent/ui';
 
 const ROLES: RoleAgent[] = ['ACCUEIL', 'GUICHET', 'RESPONSABLE', 'ADMIN'];
-const champ = 'min-h-11 w-full rounded-lg border border-line bg-sheet px-3 text-base font-normal';
-const boutonPrincipal =
-  'min-h-11 rounded-lg bg-majorelle px-5 font-semibold text-white hover:bg-majorelle-dark disabled:opacity-60';
+const boutonPrincipal = btnPrincipal;
 
 /** Administrateur : agents et rôles, guichets (affectation), services. */
 export default function Admin() {
   const { t } = useTranslation();
   const [onglet, setOnglet] = useState<'agents' | 'guichets' | 'services'>('agents');
   return (
-    <div className="mt-2">
-      <h1 className="text-[1.75rem] leading-tight font-bold">{t('admin.titre')}</h1>
-      <div className="mt-4">
-        <Onglets
-          libelle={t('admin.titre')} valeur={onglet} surChoix={setOnglet}
-          options={[
-            { id: 'agents', titre: t('admin.agents') },
-            { id: 'guichets', titre: t('admin.guichets') },
-            { id: 'services', titre: t('admin.services') },
-          ]}
-        />
+    <div className="space-y-8">
+      <div className="flex justify-center">
+      <Onglets
+        libelle={t('admin.titre')} valeur={onglet} surChoix={setOnglet}
+        options={[
+          { id: 'agents', titre: t('admin.agents') },
+          { id: 'guichets', titre: t('admin.guichets') },
+          { id: 'services', titre: t('admin.services') },
+        ]}
+      />
       </div>
-      <div className="mt-6">
+      <div>
         {onglet === 'agents' && <Agents />}
         {onglet === 'guichets' && <Guichets />}
         {onglet === 'services' && <ServicesConfig peutCreer />}
@@ -45,6 +43,7 @@ export default function Admin() {
 // ------------------------------------------------------------------ agents
 
 function Agents() {
+  const { t } = useTranslation();
   const texteErreur = useTexteErreur();
   const moi = useSession()!;
   const [agents, setAgents] = useState<AgentView[] | null>(null);
@@ -59,15 +58,17 @@ function Agents() {
 
   return (
     <div className="space-y-6">
+      <NouvelAgent surCree={(a) => setAgents((l) => [...(l ?? []), a])} />
       {erreur !== null && <MessageErreur texte={texteErreur(erreur)} surReessayer={charger} />}
       {agents && (
-        <ul className="divide-y divide-line overflow-hidden rounded-2xl bg-sheet shadow-[0_2px_0_var(--color-line)]">
-          {agents.map((a) => (
-            <LigneAgent key={a.id} agent={a} estMoi={a.id === moi.agentId} surChange={remplacer} />
-          ))}
-        </ul>
+        <Section titre={t('admin.agents')} compteur={agents.length}>
+          <ul className={`${carte} divide-y divide-line overflow-hidden`}>
+            {agents.map((a) => (
+              <LigneAgent key={a.id} agent={a} estMoi={a.id === moi.agentId} surChange={remplacer} />
+            ))}
+          </ul>
+        </Section>
       )}
-      <NouvelAgent surCree={(a) => setAgents((l) => [...(l ?? []), a])} />
     </div>
   );
 }
@@ -90,9 +91,13 @@ function LigneAgent({ agent, estMoi, surChange }: { agent: AgentView; estMoi: bo
 
   return (
     <li className="p-4">
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+        <Initiales nom={agent.nom} role={agent.role} className="size-11" />
         <div className="min-w-40 flex-1">
-          <p className={`font-semibold ${agent.actif ? '' : 'text-muted line-through'}`}>{agent.nom}</p>
+          <p className={`font-bold ${agent.actif ? '' : 'text-muted line-through'}`}>
+            {agent.nom}
+            {estMoi && <span className="ms-2 rounded-full bg-majorelle-tint px-2 py-0.5 align-middle text-xs font-bold text-majorelle">{t('admin.vous')}</span>}
+          </p>
           <p className="text-sm text-muted" dir="ltr">{agent.login}</p>
         </div>
         <label className="text-sm font-semibold">
@@ -100,20 +105,13 @@ function LigneAgent({ agent, estMoi, surChange }: { agent: AgentView; estMoi: bo
           <select
             value={agent.role} disabled={estMoi}
             onChange={(e) => void modifier({ role: e.target.value as RoleAgent })}
-            className="min-h-11 rounded-lg border border-line bg-sheet px-2 font-normal disabled:opacity-60"
+            className={`min-h-11 rounded-xl border border-transparent px-3 font-bold disabled:opacity-70 ${STYLE_ROLE[agent.role].fond} ${STYLE_ROLE[agent.role].texte}`}
           >
             {ROLES.map((r) => <option key={r} value={r}>{t(`roles.${r}`)}</option>)}
           </select>
         </label>
-        <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
-          <input
-            type="checkbox" checked={agent.actif} disabled={estMoi}
-            onChange={(e) => void modifier({ actif: e.target.checked })}
-            className="size-5 accent-majorelle"
-          />
-          {t('admin.actif')}
-        </label>
-        <button type="button" onClick={() => setMdp(mdp === null ? '' : null)} className="min-h-11 px-2 text-sm font-semibold text-majorelle-dark underline">
+        <Interrupteur actif={agent.actif} desactive={estMoi} libelle={t('admin.actif')} surChange={(v) => void modifier({ actif: v })} />
+        <button type="button" onClick={() => setMdp(mdp === null ? '' : null)} className="min-h-11 rounded-lg px-3 text-sm font-bold text-majorelle hover:bg-majorelle-tint">
           {t('admin.changerMdp')}
         </button>
       </div>
@@ -167,20 +165,20 @@ function NouvelAgent({ surCree }: { surCree: (a: AgentView) => void }) {
   }
 
   return (
-    <form onSubmit={creer} className="rounded-2xl border-2 border-dashed border-line p-5">
-      <h3 className="text-lg font-semibold">{t('admin.nouvelAgent')}</h3>
+    <form onSubmit={creer} className={`${carte} p-6`}>
+      <h3 className="text-lg font-extrabold">{t('admin.nouvelAgent')}</h3>
       <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <label className="text-sm font-semibold">{t('admin.nom')}
+        <label className={etiquette}>{t('admin.nom')}
           <input value={nom} onChange={(e) => setNom(e.target.value)} required maxLength={100} className={`${champ} mt-1`} />
         </label>
-        <label className="text-sm font-semibold">{t('connexion.login')}
+        <label className={etiquette}>{t('connexion.login')}
           <input value={login} onChange={(e) => setLogin(e.target.value)} required maxLength={60} dir="ltr" autoComplete="off" className={`${champ} mt-1`} />
         </label>
-        <label className="text-sm font-semibold">{t('connexion.mdp')}
+        <label className={etiquette}>{t('connexion.mdp')}
           <input type="password" value={mdp} onChange={(e) => setMdp(e.target.value)} required minLength={10} maxLength={72} dir="ltr" autoComplete="new-password" className={`${champ} mt-1`} />
           <span className="mt-1 block text-xs font-normal text-muted">{t('admin.mdpAide')}</span>
         </label>
-        <label className="text-sm font-semibold">{t('admin.role')}
+        <label className={etiquette}>{t('admin.role')}
           <select value={role} onChange={(e) => setRole(e.target.value as RoleAgent)} className={`${champ} mt-1`}>
             {ROLES.map((r) => <option key={r} value={r}>{t(`roles.${r}`)}</option>)}
           </select>
@@ -195,6 +193,7 @@ function NouvelAgent({ surCree }: { surCree: (a: AgentView) => void }) {
 // ------------------------------------------------------------------ guichets
 
 function Guichets() {
+  const { t } = useTranslation();
   const texteErreur = useTexteErreur();
   const [guichets, setGuichets] = useState<GuichetView[] | null>(null);
   const [agents, setAgents] = useState<AgentView[]>([]);
@@ -214,9 +213,11 @@ function Guichets() {
 
   return (
     <div className="space-y-6">
+      <NouveauGuichet agents={agents} services={services} surCree={(g) => setGuichets((l) => [...(l ?? []), g])} />
       {erreur !== null && <MessageErreur texte={texteErreur(erreur)} surReessayer={charger} />}
       {guichets && (
-        <ul className="divide-y divide-line overflow-hidden rounded-2xl bg-sheet shadow-[0_2px_0_var(--color-line)]">
+        <Section titre={t('admin.guichets')} compteur={guichets.length}>
+        <ul className={`${carte} divide-y divide-line overflow-hidden`}>
           {guichets.map((g) => (
             <LigneGuichet
               key={g.id} guichet={g} agents={agents} services={services}
@@ -224,8 +225,8 @@ function Guichets() {
             />
           ))}
         </ul>
+        </Section>
       )}
-      <NouveauGuichet agents={agents} services={services} surCree={(g) => setGuichets((l) => [...(l ?? []), g])} />
     </div>
   );
 }
@@ -250,16 +251,19 @@ function LigneGuichet({
   return (
     <li className="p-4">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-        <p className="min-w-28 font-semibold">
-          {t('ticket.guichet', { n: guichet.numero })}
-          <span className={`ms-2 text-sm ${guichet.etat === 'OUVERT' ? 'text-ok' : 'text-muted'}`}>{t(`guichet.etat.${guichet.etat}`)}</span>
+        <p className="flex min-w-44 items-center gap-3 font-extrabold">
+          <span className="grid size-11 place-items-center rounded-xl bg-majorelle-tint text-lg text-majorelle tabular-nums">{guichet.numero}</span>
+          <span className="flex flex-col items-start gap-1">
+            {t('ticket.guichet', { n: guichet.numero })}
+            <Pastille ton={guichet.etat === 'OUVERT' ? 'ok' : guichet.etat === 'PAUSE' ? 'attention' : 'neutre'}>{t(`guichet.etat.${guichet.etat}`)}</Pastille>
+          </span>
         </p>
         <label className="text-sm font-semibold">
           <span className="sr-only">{t('admin.service')}</span>
           <select
             value={guichet.serviceId ?? ''} disabled={verrou}
             onChange={(e) => void affecter(e.target.value ? Number(e.target.value) : null, guichet.agentId)}
-            className="min-h-11 rounded-lg border border-line bg-sheet px-2 font-normal disabled:opacity-60"
+            className={`${champ} w-auto min-w-44`}
           >
             <option value="">{t('admin.aucunService')}</option>
             {services.map((s) => <option key={s.id} value={s.id}>{nomService(s.nom)}</option>)}
@@ -270,7 +274,7 @@ function LigneGuichet({
           <select
             value={guichet.agentId ?? ''} disabled={verrou}
             onChange={(e) => void affecter(guichet.serviceId, e.target.value ? Number(e.target.value) : null)}
-            className="min-h-11 rounded-lg border border-line bg-sheet px-2 font-normal disabled:opacity-60"
+            className={`${champ} w-auto min-w-44`}
           >
             <option value="">{t('admin.aucunAgent')}</option>
             {/* l'agent déjà affecté reste listé même s'il n'est plus « disponible » */}
@@ -280,7 +284,7 @@ function LigneGuichet({
             {agents.map((a) => <option key={a.id} value={a.id}>{a.nom}</option>)}
           </select>
         </label>
-        {verrou && <span className="text-sm text-muted">{t('admin.affectationFerme')}</span>}
+        {verrou && <span className="text-sm text-muted italic">{t('admin.affectationFerme')}</span>}
       </div>
       {erreur !== null && <div className="mt-3"><MessageErreur texte={texteErreur(erreur)} /></div>}
     </li>
@@ -311,19 +315,19 @@ function NouveauGuichet({ agents, services, surCree }: { agents: AgentView[]; se
   }
 
   return (
-    <form onSubmit={creer} className="rounded-2xl border-2 border-dashed border-line p-5">
-      <h3 className="text-lg font-semibold">{t('admin.nouveauGuichet')}</h3>
+    <form onSubmit={creer} className={`${carte} p-6`}>
+      <h3 className="text-lg font-extrabold">{t('admin.nouveauGuichet')}</h3>
       <div className="mt-3 grid gap-4 sm:grid-cols-3">
-        <label className="text-sm font-semibold">{t('admin.numero')}
+        <label className={etiquette}>{t('admin.numero')}
           <input type="number" min="1" value={numero} onChange={(e) => setNumero(e.target.value)} required dir="ltr" className={`${champ} mt-1`} />
         </label>
-        <label className="text-sm font-semibold">{t('admin.service')}
+        <label className={etiquette}>{t('admin.service')}
           <select value={serviceId} onChange={(e) => setServiceId(e.target.value)} required className={`${champ} mt-1`}>
             <option value="" disabled>—</option>
             {services.map((s) => <option key={s.id} value={s.id}>{nomService(s.nom)}</option>)}
           </select>
         </label>
-        <label className="text-sm font-semibold">{t('admin.agent')}
+        <label className={etiquette}>{t('admin.agent')}
           <select value={agentId} onChange={(e) => setAgentId(e.target.value)} className={`${champ} mt-1`}>
             <option value="">{t('admin.aucunAgent')}</option>
             {agents.map((a) => <option key={a.id} value={a.id}>{a.nom}</option>)}

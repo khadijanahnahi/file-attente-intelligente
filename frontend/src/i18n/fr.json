@@ -117,7 +117,18 @@
     "enCours": "Connexion…",
     "erreur": "Identifiant ou mot de passe incorrect.",
     "espaceAgent": "Espace agents",
-    "deconnexion": "Se déconnecter"
+    "deconnexion": "Se déconnecter",
+    "retour": "Retour à l'accueil",
+    "afficher": "Afficher le mot de passe",
+    "masquer": "Masquer le mot de passe",
+    "reserve": "Accès réservé au personnel de la commune.",
+    "panneau": "Pilotez la file, guichet par guichet.",
+    "suivant": "Appeler le suivant",
+    "points": [
+      "Appelez le prochain ticket en un clic",
+      "Gérez l'accueil et les tickets prioritaires",
+      "Suivez l'activité en temps réel"
+    ]
   },
   "ecran": {
     "voix": "Ticket {{numero}}, {{n}}",
@@ -198,7 +209,8 @@
     "abandon": "Abandon",
     "parGuichet": "Par guichet",
     "traites": "Traités",
-    "dureeMoy": "Durée moy. (min)"
+    "dureeMoy": "Durée moy. (min)",
+    "guichetsOuverts": "Guichets ouverts"
   },
   "admin": {
     "titre": "Administration",
@@ -218,7 +230,8 @@
     "aucunAgent": "Aucun agent",
     "affectationFerme": "Fermez le guichet pour changer l'affectation.",
     "nouveauGuichet": "Nouveau guichet",
-    "numero": "Numéro"
+    "numero": "Numéro",
+    "vous": "Vous"
   },
   "landing": {
     "pied": "Services de l'état civil · Commune",
@@ -342,6 +355,14 @@
       "services": "Démarches",
       "etapes": "Comment ça marche",
       "faq": "Questions"
+    }
+  },
+  "espace": {
+    "sous": {
+      "GUICHET": "Appelez et traitez les citoyens de votre file.",
+      "ACCUEIL": "Créez un ticket pour une personne sans smartphone.",
+      "RESPONSABLE": "Suivez l'activité du jour et réglez les services.",
+      "ADMIN": "Gérez les agents, les guichets et les services."
     }
   }
 }
