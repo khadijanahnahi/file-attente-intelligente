@@ -66,7 +66,7 @@ const ETAPES = [
 export default function Etapes() {
   const { t } = useTranslation();
   return (
-    <section id="etapes" className="py-14">
+    <section id="etapes" className="scroll-mt-24 py-14">
       <h2 className="lp-rv mb-10 max-w-[20ch] text-[clamp(1.7rem,3.6vw,2.5rem)] leading-tight font-extrabold text-balance">
         {t('landing.etapes.titre')}
       </h2>

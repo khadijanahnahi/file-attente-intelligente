@@ -242,12 +242,26 @@
       "attente": "d'attente",
       "dansFile": "Vous êtes dans la file. Pas besoin de rester debout.",
       "bientot": "Bientôt appelé : rapprochez-vous de l'accueil.",
-      "appele": "C'est à vous ! Rendez-vous au guichet 2."
+      "appele": "C'est à vous ! Rendez-vous au guichet 2.",
+      "demo": "Démonstration interactive",
+      "choisir": "Choisissez votre démarche",
+      "services": [
+        "Acte de naissance",
+        "Légalisation de signature",
+        "Certificat de résidence"
+      ],
+      "avancer": "Faire avancer la file",
+      "rejouer": "Rejouer",
+      "notif": "Votre tour approche !",
+      "guichet": "Guichet 2",
+      "astuce": "Touchez une démarche pour essayer"
     },
     "puce": {
       "telephone": "Depuis votre téléphone",
       "attente": "Temps d'attente estimé",
-      "prevenu": "Prévenu avant votre tour"
+      "prevenu": "Prévenu avant votre tour",
+      "etape": "1 · Prenez le ticket",
+      "alerte": "2 · Restez où vous voulez"
     },
     "demarches": [
       "Acte de naissance",
@@ -271,7 +285,22 @@
       "p2t": "Je n'en ai pas",
       "p2p": "Un agent d'accueil crée mon ticket à ma place.",
       "p3t": "J'ai besoin d'une priorité",
-      "p3p": "À l'accueil, un agent peut me donner un ticket prioritaire (personne âgée, femme enceinte, handicap)."
+      "p3p": "À l'accueil, un agent peut me donner un ticket prioritaire (personne âgée, femme enceinte, handicap).",
+      "p1s": [
+        "Je choisis ma démarche sur mon téléphone",
+        "Je reçois mon numéro (par exemple N-042)",
+        "Je suis mon tour en direct et je viens quand on me prévient"
+      ],
+      "p2s": [
+        "Je vais à l'accueil",
+        "Je dis à l'agent la démarche que je veux faire",
+        "Je reçois mon numéro et j'attends mon appel sur l'écran de la salle"
+      ],
+      "p3s": [
+        "Je me présente à l'accueil",
+        "J'explique ma situation à l'agent",
+        "Je reçois un ticket prioritaire (numéro N-P…)"
+      ]
     },
     "faq": {
       "titre": "Questions fréquentes",
@@ -288,6 +317,31 @@
       "titre": "Une carte pour s'y retrouver",
       "texte": "Chaque pastille est une démarche. Touchez-en une : elle est choisie dans la liste, prête pour votre ticket.",
       "legende": "Une pastille grise correspond à une démarche fermée."
+    },
+    "gens": {
+      "a": {
+        "nom": "Youssef",
+        "etat": "est au guichet 1"
+      },
+      "b": {
+        "nom": "Salma",
+        "etat": "sera appelée juste après"
+      },
+      "c": {
+        "nom": "Hamza",
+        "etat": "attend dehors, ≈ 9 min"
+      },
+      "d": {
+        "nom": "Imane",
+        "etat": "a été prévenue par notification"
+      }
+    },
+    "nav": {
+      "menu": "Navigation",
+      "tagline": "Services de l'état civil",
+      "services": "Démarches",
+      "etapes": "Comment ça marche",
+      "faq": "Questions"
     }
   }
 }

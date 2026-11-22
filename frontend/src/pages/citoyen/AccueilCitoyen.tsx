@@ -10,7 +10,7 @@ export default function AccueilCitoyen() {
   return (
     <>
       <Hero />
-      <div id="services" className="lp-rv mx-auto max-w-5xl scroll-mt-6 py-14">
+      <div id="services" className="lp-rv mx-auto max-w-5xl scroll-mt-24 py-14">
         <ChoixService />
       </div>
       <Etapes />
