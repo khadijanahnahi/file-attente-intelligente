@@ -8,6 +8,7 @@ import MessageErreur, { useTexteErreur } from '../../components/MessageErreur';
 import TicketStub from '../../components/TicketStub';
 import { useConnexionTempsReel, useTopic } from '../../hooks/useStomp';
 import AlerteSuivi from '../../components/AlerteSuivi';
+import MessagesRecus from '../../components/MessagesRecus';
 import { contactsMemorises, estActif, memoriserTicket } from '../../hooks/useTicketEnCours';
 
 const CLE_MESSAGE: Record<TicketInfo['etat'], string> = {
@@ -159,16 +160,7 @@ export default function MonTicket() {
         </p>
       )}
 
-      {messages.length > 0 && (
-        <div className="mt-8">
-          <h2 className="mb-2 text-sm font-semibold">{t('ticket.messages')}</h2>
-          <ul className="divide-y divide-line rounded-xl bg-sheet text-sm shadow-[0_2px_0_var(--color-line)]">
-            {messages.map((m, i) => (
-              <li key={`${i}-${m}`} className="px-4 py-3">{m}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <MessagesRecus messages={messages} />
 
       {erreur !== null && <div className="mt-6"><MessageErreur texte={texteErreur(erreur)} /></div>}
 

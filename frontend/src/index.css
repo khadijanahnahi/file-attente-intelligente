@@ -189,3 +189,12 @@ body { font-family: var(--font-sans); min-height: 100dvh; -webkit-font-smoothing
   --color-majorelle-dark: #172554;
   --color-majorelle-tint: #e0e7ff;
 }
+
+/* Alertes citoyen : entrée du panneau et onde autour du numéro de guichet */
+@keyframes alerte-entree { from { transform: translateY(-10px) scale(0.98); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes alerte-onde { 0% { transform: scale(1); opacity: 0.55; } 100% { transform: scale(1.45); opacity: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .alerte-entree { animation: alerte-entree 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .alerte-onde { animation: alerte-onde 1.6s ease-out infinite; }
+}
+
